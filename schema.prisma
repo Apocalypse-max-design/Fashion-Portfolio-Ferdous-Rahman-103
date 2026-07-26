@@ -1,0 +1,150 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Admin User
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  name      String
+  role      String   @default("admin")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Profile Information
+model Profile {
+  id              String   @id @default(cuid())
+  name            String
+  title           String
+  bio             String
+  profileImage    String?
+  heroTitle       String?
+  heroSubtitle    String?
+  aboutText       String?
+  careerObjective String?
+  interests       String?
+  passionStory    String?
+  email           String?
+  phone           String?
+  location        String?
+  linkedin        String?
+  instagram       String?
+  facebook        String?
+  github          String?
+  cvUrl           String?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+// Skills
+model Skill {
+  id        String   @id @default(cuid())
+  name      String
+  level     Int
+  category  String
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// Education
+model Education {
+  id           String   @id @default(cuid())
+  degree       String
+  institution  String
+  location     String
+  startDate    String
+  endDate      String?
+  current      Boolean  @default(false)
+  description  String?
+  order        Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+// Experience
+model Experience {
+  id          String   @id @default(cuid())
+  title       String
+  company     String
+  location    String
+  startDate   String
+  endDate     String?
+  current     Boolean  @default(false)
+  description String?
+  type        String // internship, workshop, fashion_show, freelance, competition
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Projects
+model Project {
+  id          String   @id @default(cuid())
+  title       String
+  description String
+  category    String
+  tools       String[]
+  coverImage  String?
+  pdfUrl      String?
+  status      String   @default("published") // draft, published
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  images      ProjectImage[]
+}
+
+// Project Images
+model ProjectImage {
+  id        String   @id @default(cuid())
+  projectId String
+  url       String
+  caption   String?
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+  project   Project  @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+// Portfolio Gallery
+model PortfolioItem {
+  id          String   @id @default(cuid())
+  title       String
+  category    String   // sketches, garments, illustrations, technical, photoshoots
+  imageUrl    String
+  description String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Certificates
+model Certificate {
+  id          String   @id @default(cuid())
+  title       String
+  organization String
+  date        String
+  description String?
+  imageUrl    String?
+  pdfUrl      String?
+  order       Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+// Contact Messages
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  subject   String
+  message   String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
